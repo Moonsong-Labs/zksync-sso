@@ -4,8 +4,8 @@ import { z } from "zod";
 export const config = createEnv({
   server: {
     FETCH_INTERVAL: z.preprocess(
-      (val) => Number(val),
-      z.number().default(60 * 1000)
+      (val) => (val === undefined ? 60 * 1000 : Number(val)),
+      z.number()
     ),
     ZKSYNC_PRIVATE_KEY: z.string(),
   },
