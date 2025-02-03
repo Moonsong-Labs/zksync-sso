@@ -1,6 +1,6 @@
 import { Wallet } from "ethers";
 import { Provider, types } from "zksync-ethers";
-import config from "./config";
+import { config } from "./config";
 
 
 export class ContractUpdater {

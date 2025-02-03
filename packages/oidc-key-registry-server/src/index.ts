@@ -1,4 +1,5 @@
-import config from "./config";
+
+import { config } from "./config";
 import { ContractUpdater } from "./contractUpdater";
 import { GoogleFetcher } from "./fetchers/google";
 

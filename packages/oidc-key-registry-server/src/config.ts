@@ -1,6 +1,14 @@
-import "dotenv/config";
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
 
-export default {
-  FETCH_INTERVAL: parseInt(process.env.FETCH_INTERVAL || "60000"),
-  ZKSYNC_PRIVATE_KEY: process.env.ZKSYNC_PRIVATE_KEY!,
-};
+export const config = createEnv({
+  server: {
+    FETCH_INTERVAL: z.preprocess(
+      (val) => Number(val),
+      z.number().default(60 * 1000)
+    ),
+    ZKSYNC_PRIVATE_KEY: z.string(),
+  },
+  runtimeEnv: process.env,
+  emptyStringAsUndefined: true,
+});
