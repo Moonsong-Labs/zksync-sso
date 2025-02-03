@@ -1,12 +1,15 @@
 import config from "./config";
+import { ContractUpdater } from "./contractUpdater";
 import { GoogleFetcher } from "./fetchers/google";
 
 const main = async () => {
   const fetcher = new GoogleFetcher();
+  const contractUpdater = new ContractUpdater();
 
   try {
     const keys = await fetcher.fetchKeys();
     console.log("Fetched keys:", keys);
+    contractUpdater.updateContract();
   } catch (error) {
     console.error("Error fetching keys:", error);
   }
