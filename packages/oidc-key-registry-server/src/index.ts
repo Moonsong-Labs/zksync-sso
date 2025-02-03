@@ -1,3 +1,4 @@
+import config from "./config";
 import { GoogleFetcher } from "./fetchers/google";
 
 const main = async () => {
@@ -10,7 +11,7 @@ const main = async () => {
     console.error("Error fetching keys:", error);
   }
 
-  setTimeout(main, 60 * 1000);
+  setTimeout(main, config.FETCH_INTERVAL);
 };
 
 main();
