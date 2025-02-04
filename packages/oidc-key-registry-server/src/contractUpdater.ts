@@ -305,29 +305,39 @@ export class ContractUpdater {
   }
 
   public async updateContract(iss: string, keys: Key[]): Promise<void> {
-    console.log("Updating contract...");
+    console.log(`Updating contract for issuer: ${iss}`);
 
     const issHash = this.getIssHash(iss);
-    let finalKeys = [];
-    for (const key of keys) {
-      const tx = await this.contract.getKey(issHash, key.kid);
-      console.log(tx);
-      if (tx.kid === key.kid) {
-        console.log("Key already exists, skipping:", key.kid);
-      } else {
-        finalKeys.push(key);
-      }
-    }
+    const newKeys = await this.getNewKeys(issHash, keys);
 
-    if (finalKeys.length === 0) {
-      console.log("No new keys to add");
+    if (newKeys.length === 0) {
+      console.log("No new keys to add.");
       return;
     }
 
-    const tx = await this.contract.setKeys(issHash, finalKeys);
-    console.log("Transaction hash:", tx.hash);
-    await tx.wait();
-    console.log("Transaction confirmed");
+    try {
+      const tx = await this.contract.setKeys(issHash, newKeys);
+      console.log(`Transaction sent: ${tx.hash}`);
+      await tx.wait();
+      console.log("Transaction confirmed!");
+    } catch (error) {
+      console.error("Error updating contract:", error);
+    }
+  }
+
+  private async getNewKeys(issHash: string, keys: Key[]): Promise<Key[]> {
+    const results = await Promise.all(
+      keys.map(async (key) => {
+        try {
+          const stored = await this.contract.getKey(issHash, key.kid);
+          return stored.kid !== key.kid ? key : null;
+        } catch (error) {
+          return key;
+        }
+      })
+    );
+
+    return results.filter((key): key is Key => key !== null);
   }
 
   private getNetwork(): types.Network {
