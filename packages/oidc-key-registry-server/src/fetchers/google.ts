@@ -10,8 +10,8 @@ export class GoogleFetcher implements KeyFetcher {
     const data = await response.json();
     return data.keys.map((key: any) => ({
       kid: this.toBytes32(key.kid),
-      n: this.toBytes(key.n),
-      e: this.toBytes(key.e),
+      n: this.toHex(key.n),
+      e: this.toHex(key.e),
     }));
   }
 
@@ -19,7 +19,7 @@ export class GoogleFetcher implements KeyFetcher {
     return `0x${str.padStart(64, '0')}`;
   }
 
-  toBytes(str: string): string {
+  toHex(str: string): string {
     return `0x${Buffer.from(str, 'base64url').toString('hex')}`;
   }
 }

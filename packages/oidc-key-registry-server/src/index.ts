@@ -9,7 +9,6 @@ const main = async () => {
 
   try {
     const keys = await fetcher.fetchKeys();
-    console.log("Fetched keys:", keys);
     await contractUpdater.updateContract("accounts.google.com", keys);
   } catch (error) {
     console.error("Error fetching keys:", error);
