@@ -12,7 +12,6 @@ export const config = createEnv({
     ),
     ZKSYNC_PRIVATE_KEY: z.string(),
     CONTRACT_ADDRESS: z.string(),
-    CONTRACT_ABI: z.string(),
     NETWORK: z.enum(validNetworks).optional(),
     RPC_URL: z.string().url().optional(),
   },
